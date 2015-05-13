@@ -5,6 +5,7 @@
 [![Code Climate](https://codeclimate.com/github/sensu-plugins/sensu-plugins-springboot/badges/gpa.svg)](https://codeclimate.com/github/sensu-plugins/sensu-plugins-springboot)
 [![Test Coverage](https://codeclimate.com/github/sensu-plugins/sensu-plugins-springboot/badges/coverage.svg)](https://codeclimate.com/github/sensu-plugins/sensu-plugins-springboot)
 [![Dependency Status](https://gemnasium.com/sensu-plugins/sensu-plugins-springboot.svg)](https://gemnasium.com/sensu-plugins/sensu-plugins-springboot)
+[ ![Codeship Status for sensu-plugins/sensu-plugins-springboot](https://codeship.com/projects/275478d0-db38-0132-1836-0eed4ec53b27/status?branch=master)](https://codeship.com/projects/79566)
 
 ## Functionality
 
