@@ -10,7 +10,7 @@
 ## Functionality
 
 ## Files
- * bin/metrics-springboot
+ * bin/metrics-springboot.rb
 
 ## Usage
 
