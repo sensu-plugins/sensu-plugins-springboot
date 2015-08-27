@@ -105,7 +105,7 @@ class SpringBootMetrics < Sensu::Plugin::Metric::CLI::Graphite
     return false
   end
 
-  def run # rubocop:disable all
+  def run
     endpoint = "http://#{config[:host]}:#{config[:port]}"
     url      = URI.parse(endpoint)
 
