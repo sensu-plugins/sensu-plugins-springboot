@@ -1,19 +1,33 @@
 language: ruby
 cache:
-  - bundler
+- bundler
 install:
-  - bundle install
+- bundle install
 rvm:
-  - 1.9.3
-  - 2.0
-  - 2.1
-  - 2.2
+- 1.9.3
+- 2.0
+- 2.1
+- 2.2
 notifications:
   email:
     recipients:
-      - sensu-plugin@sensu-plugins.io
+    - sensu-plugin@sensu-plugins.io
     on_success: change
     on_failure: always
-
 script:
-  - 'bundle exec rake default'
+- bundle exec rake default
+- gem build sensu-plugins-springboot.gemspec
+- gem install sensu-plugins-springboot-*.gem
+deploy:
+  provider: rubygems
+  api_key:
+    secure: WuqVgZvG/88dFdFbwZHLIlE3jborAtmRMkXpgvfm8bs695HSxKilVXH7G2vK4CgWus71pWfqdGsasEdpmKccU+NR0SjpJbZjBrgVMJGW1lSN+ICPjj4S+yQi/x2YFfwf6hfpt2z4Siy5ytzwiArOEyEpomDCNh4+9oj/ZyvQ/9w=
+  gem: sensu-plugins-springboot
+  on:
+    ags: true
+    all_branches: true
+    rvm: 1.9.3
+    rvm: 2.0
+    rvm: 2.1
+    rvm: 2.2
+    repo: sensu-plugins/sensu-plugins-springboot
