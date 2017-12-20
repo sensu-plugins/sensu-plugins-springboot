@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+### Added
+- metrics-springboot.rb: new option `--protocol` to allow specifying https connection for requests  (@seanrobb)
+- metrics-springboot.rb: new option `--url` to be used as a single parameter instead of specifying `--protocol`, `--host`, `--port`, and `--path` (@seanrobb)
 
 ## [1.0.0] - 2017-06-25
 ### Added

@@ -27,6 +27,11 @@
 #     springboot-metrics.rb --host=192.168.1.1 &
 #       --port=8081 &
 #       --username=admin --password=secret --path=/metrics
+#   Use with insecure SSL:
+#     springboot-metrics.rb --host=192.168.1.1 &
+#       --port=443 &
+#       --username=admin --password=secret &
+#       --path=/metrics --insecure --protocol http
 #
 # NOTES:
 #   Check with Spring Boot 1.2.0 actuator endpoints
@@ -44,19 +49,46 @@ require 'json'
 require 'uri'
 
 class SpringBootMetrics < Sensu::Plugin::Metric::CLI::Graphite
+  option :url,
+         short: '-u URL',
+         long: '--url URL',
+         description: 'The url for your app metrics',
+         required: false
+
   option :host,
          short: '-h HOST',
          long: '--host HOST',
          description: 'Your spring boot actuator endpoint',
-         required: true,
+         required: false,
          default: 'localhost'
 
   option :port,
          short: '-P PORT',
          long: '--port PORT',
          description: 'Your app port',
-         required: true,
+         required: false,
          default: 8080
+
+  option :path,
+         short: '-e PATH',
+         long: '--path PATH',
+         description: 'Metrics endpoint path',
+         required: false,
+         default: '/metrics'
+
+  option :protocol,
+         short: '-l PROTO',
+         long: '--protocol PROTO',
+         description: 'The protocol used to make requests',
+         in: %(http https),
+         default: http
+
+  option :insecure,
+         short: '-k',
+         long: '--insecure',
+         description: 'Insecure SSL Certificate',
+         boolean: true,
+         default: false
 
   option :username,
          short: '-u USERNAME',
@@ -69,13 +101,6 @@ class SpringBootMetrics < Sensu::Plugin::Metric::CLI::Graphite
          long: '--password PASSWORD',
          description: 'Your app password',
          required: false
-
-  option :path,
-         short: '-e PATH',
-         long: '--path PATH',
-         description: 'Metrics endpoint path',
-         required: true,
-         default: '/metrics'
 
   option :scheme,
          description: 'Metric naming scheme, text to prepend to metric',
@@ -106,12 +131,17 @@ class SpringBootMetrics < Sensu::Plugin::Metric::CLI::Graphite
   end
 
   def run
-    endpoint = "http://#{config[:host]}:#{config[:port]}"
-    url      = URI.parse(endpoint)
+    unless config[:url]
+      config[:url] = "#{config[:protocol]}://#{config[:host]}:#{config[:port]}#{config[:path]}"
+    end
+
+    uri = URI.parse(config[:url])
+
+    verify_mode = config[:insecure] ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
 
     begin
-      res = Net::HTTP.start(url.host, url.port) do |http|
-        req = Net::HTTP::Get.new(config[:path])
+      res = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme, verify_mode: verify_mode) do |http|
+        req = Net::HTTP::Get.new(uri.path)
         if config[:username] && config[:password]
           req.basic_auth(config[:username], config[:password])
         end
