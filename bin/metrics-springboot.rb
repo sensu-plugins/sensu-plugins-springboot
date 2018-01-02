@@ -80,8 +80,8 @@ class SpringBootMetrics < Sensu::Plugin::Metric::CLI::Graphite
          short: '-l PROTO',
          long: '--protocol PROTO',
          description: 'The protocol used to make requests',
-         in: %(http https),
-         default: http
+         in:  %w(http https),
+         default: 'http'
 
   option :insecure,
          short: '-k',
@@ -140,7 +140,7 @@ class SpringBootMetrics < Sensu::Plugin::Metric::CLI::Graphite
     verify_mode = config[:insecure] ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
 
     begin
-      res = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme, verify_mode: verify_mode) do |http|
+      res = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https', verify_mode: verify_mode) do |http|
         req = Net::HTTP::Get.new(uri.path)
         if config[:username] && config[:password]
           req.basic_auth(config[:username], config[:password])
