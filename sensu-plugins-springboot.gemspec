@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'sensu-plugin', '~> 1.2'
 
-  s.add_development_dependency 'codeclimate-test-reporter', '~> 0.4'
+  s.add_development_dependency 'codeclimate-test-reporter', '~> 1.0'
   s.add_development_dependency 'rspec',                     '~> 3.2'
   s.add_development_dependency 'webmock'
   s.add_development_dependency 'rdoc'
